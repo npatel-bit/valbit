@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>💖 Secret Valentine 💖</title>
+<style>
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(135deg, #ffd6e8, #fff0f5);
+  text-align: center;
+  overflow: hidden;
+}
+h1 { margin-top: 60px; color: #d6336c; }
+input {
+  padding: 12px; font-size: 1.2rem;
+  border-radius: 10px; border: none;
+  margin-top: 20px;
+}
+button {
+  padding: 10px 26px;
+  border-radius: 30px;
+  border: none;
+  background: #ff4d6d;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.hidden { display: none; }
+.buttons { margin-top: 40px; position: relative; height: 180px; }
+#noBtn { background: #adb5bd; position: absolute; }
+
+.details {
+  font-size: 1.4rem;
+  color: #6a1b4d;
+  margin-top: 20px;
+}
+.countdown {
+  font-size: 1.5rem;
+  margin-top: 20px;
+}
+.photos img {
+  width: 220px;
+  border-radius: 20px;
+  margin: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.signature {
+  margin-top: 30px;
+  font-size: 1.4rem;
+  color: #c9184a;
+}
+
+.heart,.kiss {
+  position: fixed;
+  animation: float 6s linear infinite;
+}
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" src="music.mp3" loop></audio>
+
+<!-- ⛔ EXPIRED -->
+<div id="expiredScreen" class="hidden">
+  <h1>💔 This Valentine surprise has expired</h1>
+  <p>But my love for you never will 💕</p>
+</div>
+
+<!-- 🔐 LOCK -->
+<div id="lockScreen">
+  <h1>🔐 Enter the secret code</h1>
+  <input type="password" id="codeInput" placeholder="Hint: our little secret 💖">
+  <br>
+  <button onclick="checkCode()">Unlock 💘</button>
+  <p id="error" style="color:red"></p>
+</div>
+
+<!-- 💘 MAIN -->
+<div id="mainContent" class="hidden">
+
+<h1>Shreyas 💕<br>Will you be my Valentine?</h1>
+
+<div class="buttons">
+  <button id="yesBtn">Yes 💖</button>
+  <button id="noBtn">No 🙃</button>
+</div>
+
+<div id="surprise" class="hidden">
+  <div class="details">
+    <p>✨ Date: <strong>28th</strong></p>
+    <p>⏰ Time: <strong>8:00 PM</strong></p>
+    <p>📍 Venue: <strong>It’s a surprise 😘</strong></p>
+  </div>
+
+  <div class="countdown" id="countdown"></div>
+
+  <div class="photos">
+    <img src="photo1.jpg">
+    <img src="photo2.jpg">
+    <img src="photo3.jpg">
+  </div>
+
+  <div class="signature">
+    Love, Nirali ❤️
+  </div>
+</div>
+</div>
+
+<script>
+const PASSCODE="1024";
+const music=document.getElementById("bgMusic");
+
+// 🔥 Expire after Feb 14
+const now=new Date();
+const expiry=new Date(now.getFullYear(),1,15);
+if(now>=expiry){
+ lockScreen.style.display="none";
+ expiredScreen.classList.remove("hidden");
+}
+
+function checkCode(){
+ if(codeInput.value===PASSCODE){
+  lockScreen.style.display="none";
+  mainContent.classList.remove("hidden");
+  music.play();
+ } else {
+  error.innerText="Wrong code 🙈 Try again!";
+ }
+}
+
+// NO button
+noBtn.onmouseenter=noBtn.onclick=()=>{
+ alert("Are you sure? 🥺💔");
+ noBtn.style.left=Math.random()*80+"vw";
+ noBtn.style.top=Math.random()*60+"vh";
+};
+
+// YES button
+yesBtn.onclick=()=>{
+ surprise.classList.remove("hidden");
+ yesBtn.style.display=noBtn.style.display="none";
+ setInterval(()=>spawn("💖","heart"),300);
+ setInterval(()=>spawn("😘","kiss"),400);
+ startCountdown();
+};
+
+function spawn(e,c){
+ const d=document.createElement("div");
+ d.className=c;
+ d.innerHTML=e;
+ d.style.left=Math.random()*100+"vw";
+ d.style.fontSize=(24+Math.random()*20)+"px";
+ document.body.appendChild(d);
+ setTimeout(()=>d.remove(),6000);
+}
+
+function startCountdown(){
+ const target=new Date(now.getFullYear(),1,28,20,0,0);
+ setInterval(()=>{
+  const diff=target-new Date();
+  if(diff<=0){ countdown.innerText="It's time 💕"; return; }
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor(diff/3600000)%24;
+  const m=Math.floor(diff/60000)%60;
+  countdown.innerText=`⏳ ${d}d ${h}h ${m}m to our date`;
+ },1000);
+}
+</script>
+
+</body>
+</html>
